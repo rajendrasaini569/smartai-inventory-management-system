@@ -1,0 +1,25 @@
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+target/
+**/target/
+.env
+.env.*
+!.env.example
+*.log
+.idea/
+.vscode/
+
+# Java / Maven build files
+**/target/
+
+# Node dependencies and build output
+**/node_modules/
+**/dist/
+
+# Local environment secrets
+.env
+**/.env
+!.env.example
+**/.env.example

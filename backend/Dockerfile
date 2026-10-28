@@ -1,11 +1,21 @@
 FROM maven:3.9-eclipse-temurin-17 AS build
 WORKDIR /app
+
 COPY pom.xml .
 COPY src ./src
 RUN mvn clean package -DskipTests
 
 FROM eclipse-temurin:17-jre
 WORKDIR /app
+
 COPY --from=build /app/target/*.jar app.jar
-COPY ca.pem/app/ca.pem
+COPY ca.pem /app/ca.pem
+
+RUN keytool -importcert -noprompt -trustcacerts \
+    -alias aiven-ca \
+    -file /app/ca.pem \
+    -keystore /app/aiven-truststore.p12 \
+    -storetype PKCS12 \
+    -storepass changeit
+
 CMD ["sh", "-c", "java -Dserver.port=${PORT:-10000} -jar app.jar"]

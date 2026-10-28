@@ -7,7 +7,11 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
-@RestController @RequestMapping("/api") @CrossOrigin(origins={"http://localhost:5173","http://127.0.0.1:5173"})
+@RestController @RequestMapping("/api") @CrossOrigin(origins={
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "https://smartai-inventory-management-system.vercel.app"
+})
 public class InventoryController {
  private final ProductRepository products; private final SupplierRepository suppliers; private final CustomerRepository customers; private final SaleRepository sales; private final PurchaseRepository purchases; private final ReminderPreferenceRepository reminders;
  public InventoryController(ProductRepository p,SupplierRepository s,CustomerRepository c,SaleRepository sa,PurchaseRepository pu,ReminderPreferenceRepository r){products=p;suppliers=s;customers=c;sales=sa;purchases=pu;reminders=r;}

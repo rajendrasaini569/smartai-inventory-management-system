@@ -1,5 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
-import { api } from './api.js'
+
 import {
   Activity, AlertTriangle, ArrowDownRight, ArrowUpRight, BarChart3, Bell,
   Boxes, BrainCircuit, Building2, CalendarDays, Check, ChevronDown, ChevronLeft,
@@ -7,11 +6,9 @@ import {
   LayoutDashboard, LifeBuoy, Menu, MoreHorizontal, Package, Plus, Search,
   Settings, ShoppingBag, ShoppingCart, Sparkles, Tags, Truck, UserRound,
   Users, Wallet, X, Zap, SlidersHorizontal, RefreshCw, Eye, Pencil, Trash2,
+  Sun, Moon,
 } from 'lucide-react'
-import {
-  Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, Pie, PieChart,
-  ResponsiveContainer, Tooltip, XAxis, YAxis,
-} from 'recharts'
+
 
 const initialProducts = [
   { id: 'PRD-1001', name: 'Wireless Mouse', category: 'Electronics', sku: 'EL-MOU-01', price: 799, stock: 5, reorder: 20, supplier: 'TechSource India' },
@@ -333,7 +330,17 @@ const toggleDarkMode = () => {
   className="w-full rounded-xl border border-slate-200 bg-slate-50/70 py-2.5 pl-10 pr-4 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-300 focus:bg-white focus:ring-4 focus:ring-blue-50"
 />
 </div><div className="sm:hidden"><p className="font-bold text-slate-900">{page}</p><p className="text-[11px] text-slate-400">SmartAI Inventory</p></div></div>
-        <div className="flex items-center gap-2 sm:gap-4"><button onClick={() => notify(`${lowStock.length} products need stock attention.`)} className="relative rounded-xl p-2.5 text-slate-500 hover:bg-slate-100"><Bell size={19}/>{lowStock.length > 0 && <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-rose-500 ring-2 ring-white"/>}</button><div className="hidden h-8 w-px bg-slate-200 sm:block"/><button className="flex items-center gap-2 rounded-xl p-1.5 pr-1 hover:bg-slate-50" onClick={() => go('Settings')}><div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-blue-100 to-violet-100 text-sm font-bold text-blue-700">AD</div><div className="hidden text-left sm:block"><p className="text-sm font-semibold text-slate-800">Admin User</p><p className="text-[11px] text-slate-400">Store administrator</p></div><ChevronDown size={15} className="hidden text-slate-400 sm:block"/></button></div>
+        <div className="flex items-center gap-2 sm:gap-4"><button onClick={() => notify(`${lowStock.length} products need stock attention.`)} className="relative rounded-xl p-2.5 text-slate-500 hover:bg-slate-100"><Bell size={19}/>{lowStock.length > 0 && <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-rose-500 ring-2 ring-white"/>}</button> <button
+  onClick={toggleDarkMode}
+  title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+  className={`rounded-xl p-2.5 ${
+    darkMode
+      ? 'bg-slate-800 text-yellow-400 hover:bg-slate-700'
+      : 'text-slate-500 hover:bg-slate-100'
+  }`}
+>
+  {darkMode ? <Sun size={19} /> : <Moon size={19} />}
+</button><div className="hidden h-8 w-px bg-slate-200 sm:block"/><button className="flex items-center gap-2 rounded-xl p-1.5 pr-1 hover:bg-slate-50" onClick={() => go('Settings')}><div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-blue-100 to-violet-100 text-sm font-bold text-blue-700">AD</div><div className="hidden text-left sm:block"><p className="text-sm font-semibold text-slate-800">Admin User</p><p className="text-[11px] text-slate-400">Store administrator</p></div><ChevronDown size={15} className="hidden text-slate-400 sm:block"/></button></div>
       </header>
 
      <main className={`mx-auto max-w-[1600px] min-h-screen px-4 py-6 sm:px-7 sm:py-8 lg:px-9 transition-colors duration-300 ${

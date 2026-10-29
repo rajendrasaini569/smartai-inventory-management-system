@@ -158,6 +158,10 @@ function App() {
 
   const notify = (message) => { setToast(message); window.setTimeout(() => setToast(''), 2800) }
   const lowStock = products.filter(p => p.stock <= p.reorder)
+  const suggestedRestock =
+  [...products]
+    .filter(p => p.stock <= p.reorder)
+    .sort((a, b) => a.stock - b.stock)[0] || products[0]
   const stockValue = products.reduce((sum, p) => sum + p.price * p.stock, 0)
   const totalUnits = products.reduce((sum, p) => sum + p.stock, 0)
   const filteredProducts = useMemo(() => products.filter(p => {
@@ -304,7 +308,53 @@ function App() {
           <div className="overflow-hidden rounded-3xl bg-gradient-to-br from-[#10213f] via-[#164e8a] to-[#0f9f91] p-6 text-white sm:p-8">
             <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr] lg:items-center">
               <div><span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold"><Sparkles size={14}/> SMARTAI CONNECT</span><h2 className="mt-4 max-w-xl text-3xl font-bold tracking-tight sm:text-4xl">A smarter connection between customers and local sellers.</h2><p className="mt-3 max-w-xl text-sm leading-6 text-blue-50">Never miss a regular purchase or a low-stock update. Help sellers understand demand, plan replenishment and build long-term customer relationships.</p><div className="mt-5 flex flex-wrap gap-3"><button onClick={() => { setReminderPrefs(p => ({ ...p, weekly: true })); setRemindersSaved(false); document.getElementById('reminder-settings')?.scrollIntoView({ behavior: 'smooth', block: 'center' }) }} className="rounded-xl bg-white px-4 py-2.5 text-sm font-bold text-blue-900 hover:bg-blue-50">Set my reminders <ChevronRight size={15} className="ml-1 inline"/></button><span className="inline-flex items-center gap-2 rounded-xl border border-white/20 px-4 py-2.5 text-sm text-white"><Bell size={16}/> Customer notifications</span></div></div>
-              <div className="rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur-sm"><div className="flex items-center justify-between"><div><p className="text-sm text-blue-100">Next suggested restock</p><p className="mt-1 text-xl font-bold">Basmati Rice 5kg</p></div><div className="rounded-xl bg-amber-300/20 p-3 text-amber-100"><AlertTriangle size={22}/></div></div><div className="mt-4 h-2 overflow-hidden rounded-full bg-white/20"><div className="h-full w-[28%] rounded-full bg-amber-300"/></div><div className="mt-2 flex justify-between text-xs text-blue-100"><span>8 units remaining</span><span>Reorder suggested</span></div><div className="mt-4 rounded-xl bg-white/10 p-3 text-sm"><Bell size={15} className="mr-2 inline"/> Reminder preview: “Your usual item may run low soon.”</div></div>
+             
+<div className="rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur-sm">
+  {suggestedRestock ? (
+    <>
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm text-blue-100">Next suggested restock</p>
+          <p className="mt-1 text-xl font-bold">{suggestedRestock.name}</p>
+        </div>
+        <div className="rounded-xl bg-amber-300/20 p-3 text-amber-100">
+          <AlertTriangle size={22}/>
+        </div>
+      </div>
+
+      <div className="mt-4 h-2 overflow-hidden rounded-full bg-white/20">
+        <div
+          className="h-full rounded-full bg-amber-300"
+          style={{
+            width: `${Math.min(
+              100,
+              (suggestedRestock.stock / Math.max(suggestedRestock.reorder, 1)) * 100
+            )}%`
+          }}
+        />
+      </div>
+
+      <div className="mt-2 flex justify-between gap-2 text-xs text-blue-100">
+        <span>{suggestedRestock.stock} units remaining</span>
+        <span>
+          {suggestedRestock.stock <= suggestedRestock.reorder
+            ? 'Reorder suggested'
+            : 'Stock looks okay'}
+        </span>
+      </div>
+
+      <div className="mt-4 rounded-xl bg-white/10 p-3 text-sm">
+        <Bell size={15} className="mr-2 inline"/>
+        {suggestedRestock.stock <= suggestedRestock.reorder
+          ? `${suggestedRestock.name} needs replenishment soon.`
+          : 'No products currently need replenishment.'}
+      </div>
+    </>
+  ) : (
+    <p className="text-sm text-blue-100">No inventory products available yet.</p>
+  )}
+</div>
+
             </div>
           </div>
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">

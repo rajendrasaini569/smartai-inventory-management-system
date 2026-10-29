@@ -312,7 +312,51 @@ function App() {
           </div>
           <div className="grid gap-5 xl:grid-cols-[1.1fr_.9fr]">
             <section id="reminder-settings" className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-6"><div className="flex items-start justify-between gap-3"><div><h3 className="text-lg font-bold text-slate-900">Customer reminder preferences</h3><p className="mt-1 text-sm text-slate-500">Choose when and what you want to be reminded about.</p></div><div className="rounded-xl bg-blue-50 p-3 text-blue-600"><Bell size={20}/></div></div>
-              <div className="mt-5"><Field label="Customer email"><input type="email" className={inputClass} value={reminderPrefs.email} onChange={e => { setReminderPrefs({ ...reminderPrefs, email: e.target.value }); setRemindersSaved(false) }} placeholder="you@example.com"/></Field></div>
+             
+<div className="mt-5 space-y-3">
+  <Field label="Select customer">
+    <select
+      className={inputClass}
+      value={reminderPrefs.email}
+      onChange={e => {
+        setReminderPrefs({
+          ...reminderPrefs,
+          email: e.target.value
+        });
+        setRemindersSaved(false);
+      }}
+    >
+      <option value="">Choose a customer</option>
+      {customers.map((customer, index) => (
+        <option
+          key={customer.id ?? customer.email ?? index}
+          value={customer.email ?? ''}
+          disabled={!customer.email}
+        >
+          {customer.name ?? customer.email ?? `Customer ${index + 1}`}
+          {customer.email ? ` (${customer.email})` : ''}
+        </option>
+      ))}
+    </select>
+  </Field>
+
+  <Field label="Customer email">
+    <input
+      type="email"
+      className={inputClass}
+      value={reminderPrefs.email}
+      onChange={e => {
+        setReminderPrefs({
+          ...reminderPrefs,
+          email: e.target.value
+        });
+        setRemindersSaved(false);
+      }}
+      placeholder="you@example.com"
+    />
+  </Field>
+</div>
+
               <p className="mb-2 mt-5 text-sm font-semibold text-slate-800">Purchase reminder frequency</p><div className="grid gap-3 sm:grid-cols-3">{[{key:'daily',title:'Daily',desc:'For everyday essentials'},{key:'weekly',title:'Weekly',desc:'For regular shopping'},{key:'monthly',title:'Monthly',desc:'For monthly supplies'}].map(opt => <button key={opt.key} onClick={() => { setReminderPrefs({ ...reminderPrefs, daily: opt.key === 'daily', weekly: opt.key === 'weekly', monthly: opt.key === 'monthly' }); setRemindersSaved(false) }} className={`rounded-xl border p-4 text-left transition ${reminderPrefs[opt.key] ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-100' : 'border-slate-200 hover:border-slate-300'}`}><span className="flex items-center justify-between font-semibold text-slate-900">{opt.title}{reminderPrefs[opt.key] && <Check size={16} className="text-blue-600"/>}</span><span className="mt-1 block text-xs text-slate-500">{opt.desc}</span></button>)}</div>
               <div className="mt-5 space-y-3">{[{key:'lowStock',title:'Low-stock item alerts',desc:'Tell me when an item I regularly buy is running low.'},{key:'offers',title:'Personalized offers',desc:'Show relevant deals from my preferred store.'}].map(opt => <label key={opt.key} className="flex cursor-pointer items-center justify-between gap-4 rounded-xl border border-slate-100 p-4"><span><span className="block text-sm font-semibold text-slate-800">{opt.title}</span><span className="mt-1 block text-xs text-slate-500">{opt.desc}</span></span><input type="checkbox" checked={reminderPrefs[opt.key]} onChange={e => { setReminderPrefs({ ...reminderPrefs, [opt.key]: e.target.checked }); setRemindersSaved(false) }} className="h-4 w-4 accent-blue-600"/></label>)}</div>
               <div className="mt-5 flex flex-wrap items-center justify-between gap-3"><p className="text-xs leading-5 text-slate-400">Reminder preferences are stored in MySQL. Actual email/SMS/push delivery needs a provider and customer consent.</p><Button onClick={async () => { try { await api.saveReminders(reminderPrefs); setRemindersSaved(true); notify('Reminder preferences saved to MySQL.') } catch (error) { notify(`Could not save reminders: ${error.message}`) } }}><Check size={16}/> Save preferences</Button></div>{remindersSaved && <div className="mt-3 rounded-xl bg-emerald-50 p-3 text-sm text-emerald-800"><Check size={16} className="mr-2 inline"/> Preferences saved to the database. Email/SMS delivery needs a configured notification provider.</div>}

@@ -10,6 +10,8 @@ import {
 } from 'lucide-react'
 
 
+import { ResponsiveContainer } from 'recharts'
+
 const initialProducts = [
   { id: 'PRD-1001', name: 'Wireless Mouse', category: 'Electronics', sku: 'EL-MOU-01', price: 799, stock: 5, reorder: 20, supplier: 'TechSource India' },
   { id: 'PRD-1002', name: 'Basmati Rice 5kg', category: 'Grocery', sku: 'GR-RIC-05', price: 650, stock: 8, reorder: 25, supplier: 'Fresh Farms Co.' },

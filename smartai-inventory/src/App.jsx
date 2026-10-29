@@ -10,7 +10,22 @@ import {
 } from 'lucide-react'
 
 
-import { ResponsiveContainer } from 'recharts'
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  BarChart,
+  Bar,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
+} from 'recharts'
+
 
 const initialProducts = [
   { id: 'PRD-1001', name: 'Wireless Mouse', category: 'Electronics', sku: 'EL-MOU-01', price: 799, stock: 5, reorder: 20, supplier: 'TechSource India' },

@@ -119,6 +119,7 @@ function App() {
   const [settings, setSettings] = useState({ business: 'SmartAI Retail Store', currency: 'INR (₹)', threshold: '10', notifications: true })
   const [reminderPrefs, setReminderPrefs] = useState({ daily: false, weekly: true, monthly: false, lowStock: true, offers: true, email: 'customer@example.com' })
   const [remindersSaved, setRemindersSaved] = useState(false)
+  const [selectedProductIds, setSelectedProductIds] = useState([]);
 
   useEffect(() => {
   let active = true;
@@ -405,6 +406,52 @@ function App() {
       placeholder="you@example.com"
     />
   </Field>
+</div>
+
+<div className="mt-5">
+  <h4 className="mb-2 text-sm font-semibold text-slate-800">
+    Select products for reminders
+  </h4>
+
+  <div className="max-h-64 space-y-2 overflow-y-auto rounded-xl border border-slate-200 p-3">
+    {products.map((product, index) => {
+      const productId = String(product.id ?? product.name ?? index);
+
+      return (
+        <label
+          key={productId}
+          className="flex cursor-pointer items-center justify-between gap-3 rounded-lg border border-slate-100 p-3"
+        >
+          <span>
+            <span className="block text-sm font-medium text-slate-800">
+              {product.name ?? `Product ${index + 1}`}
+            </span>
+            <span className="text-xs text-slate-500">
+              Stock: {product.stock ?? 0}
+            </span>
+          </span>
+
+          <input
+            type="checkbox"
+            checked={selectedProductIds.includes(productId)}
+            onChange={e => {
+              setSelectedProductIds(previous =>
+                e.target.checked
+                  ? [...previous, productId]
+                  : previous.filter(id => id !== productId)
+              );
+              setRemindersSaved(false);
+            }}
+            className="h-4 w-4 accent-blue-600"
+          />
+        </label>
+      );
+    })}
+  </div>
+
+  <p className="mt-2 text-xs text-slate-500">
+    {selectedProductIds.length} product(s) selected
+  </p>
 </div>
 
               <p className="mb-2 mt-5 text-sm font-semibold text-slate-800">Purchase reminder frequency</p><div className="grid gap-3 sm:grid-cols-3">{[{key:'daily',title:'Daily',desc:'For everyday essentials'},{key:'weekly',title:'Weekly',desc:'For regular shopping'},{key:'monthly',title:'Monthly',desc:'For monthly supplies'}].map(opt => <button key={opt.key} onClick={() => { setReminderPrefs({ ...reminderPrefs, daily: opt.key === 'daily', weekly: opt.key === 'weekly', monthly: opt.key === 'monthly' }); setRemindersSaved(false) }} className={`rounded-xl border p-4 text-left transition ${reminderPrefs[opt.key] ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-100' : 'border-slate-200 hover:border-slate-300'}`}><span className="flex items-center justify-between font-semibold text-slate-900">{opt.title}{reminderPrefs[opt.key] && <Check size={16} className="text-blue-600"/>}</span><span className="mt-1 block text-xs text-slate-500">{opt.desc}</span></button>)}</div>

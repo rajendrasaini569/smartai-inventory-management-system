@@ -161,7 +161,7 @@ function App() {
   const suggestedRestock =
   [...products]
     .filter(p => p.stock <= p.reorder)
-    .sort((a, b) => a.stock - b.stock)[0] || products[0]
+    .sort((a, b) => a.stock - b.stock)[0] || products[0] || null
   const stockValue = products.reduce((sum, p) => sum + p.price * p.stock, 0)
   const totalUnits = products.reduce((sum, p) => sum + p.stock, 0)
   const filteredProducts = useMemo(() => products.filter(p => {

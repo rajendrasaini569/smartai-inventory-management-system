@@ -287,7 +287,7 @@ const toggleDarkMode = () => {
         <div className="flex items-center gap-2 sm:gap-4"><button onClick={() => notify(`${lowStock.length} products need stock attention.`)} className="relative rounded-xl p-2.5 text-slate-500 hover:bg-slate-100"><Bell size={19}/>{lowStock.length > 0 && <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-rose-500 ring-2 ring-white"/>}</button><div className="hidden h-8 w-px bg-slate-200 sm:block"/><button className="flex items-center gap-2 rounded-xl p-1.5 pr-1 hover:bg-slate-50" onClick={() => go('Settings')}><div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-blue-100 to-violet-100 text-sm font-bold text-blue-700">AD</div><div className="hidden text-left sm:block"><p className="text-sm font-semibold text-slate-800">Admin User</p><p className="text-[11px] text-slate-400">Store administrator</p></div><ChevronDown size={15} className="hidden text-slate-400 sm:block"/></button></div>
       </header>
 
-      <main className="mx-auto max-w-[1600px] px-4 py-6 sm:px-7 sm:py-8 lg:px-9">
+      <main className={`mx-auto max-w-[1600px] px-4 py-6 sm:px-7 sm:py-8 lg:px-9 ${darkMode ? 'dark' : ''}`}>
         <div className="mb-6 flex flex-wrap items-center justify-between gap-4"><div><div className="mb-1 flex items-center gap-2 text-xs text-slate-400"><span>Workspace</span><ChevronRight size={13}/><span className="font-medium text-slate-600">{page}</span></div><h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-[28px]">{page}</h1><p className="mt-1 text-sm text-slate-500">{pageDescriptions[page]}</p></div><div className="flex flex-wrap items-center gap-2">{page === 'Dashboard' && <div className="hidden items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-medium text-slate-600 md:flex"><CalendarDays size={15} className="text-slate-400"/> Oct 01 – Oct 15, 2026 <ChevronDown size={13}/></div>}{page === 'Products' && <Button variant="outline" onClick={exportCSV}><Download size={16}/> Export CSV</Button>}{page === 'Products' && <Button onClick={openAddProduct}><Plus size={17}/> Add product</Button>}{page === 'Sales' && <Button onClick={() => openTransaction('sale')}><Plus size={17}/> New sale</Button>}{page === 'Purchases' && <Button onClick={() => openTransaction('purchase')}><Plus size={17}/> New purchase</Button>}{page === 'Suppliers' && <Button onClick={() => setModal('supplier')}><Plus size={17}/> Add supplier</Button>}</div></div>
        <button
   onClick={toggleDarkMode}
@@ -322,8 +322,10 @@ const toggleDarkMode = () => {
 
         {page === 'Purchases' && <><div className="mb-5 grid gap-4 sm:grid-cols-3"><MetricCard title="Purchase orders" value={purchases.length} change="+3.2%" icon={ShoppingBag}/><MetricCard title="Purchase value" value={formatINR(purchases.reduce((s, x) => s + x.amount, 0))} change="+5.8%" icon={Wallet} tone="teal"/><MetricCard title="Pending orders" value={purchases.filter(p => p.status === 'Pending').length} change="Needs review" icon={Truck} tone="orange"/></div><DataTable title="Purchase history" subtitle="Incoming stock and supplier orders" columns={['Purchase ID', 'Supplier', 'Date', 'Units', 'Amount', 'Status']} rows={purchases.map(p => [p.id, p.supplier, p.date, p.items, formatINR(p.amount), <Status>{p.status}</Status>])}/></>}
 
-        {page === 'Suppliers' && <DataTable title="Supplier directory" subtitle={`${suppliers.length} suppliers in your directory`} columns={['Supplier', 'Contact person', 'Email', 'Products', 'Status']} rows={suppliers.map(s => [<span className="font-semibold text-slate-800">{s.name}</span>, s.contact, s.email, s.products, <Status>{s.status}</Status>])}/>}
-        {page === 'Customers' && <DataTable title="Customer directory" subtitle="Customer activity and purchase history" columns={['Customer', 'Email', 'Orders', 'Total spent', 'Type']} rows={customers.map(c => [<span className="font-semibold text-slate-800">{c.name}</span>, c.email, c.orders, formatINR(c.spent), <Status>{c.type}</Status>])}/>}
+      
+       {page === 'Suppliers' && <DataTable title="Supplier directory" subtitle={`${suppliers.length} suppliers in your directory`} columns={['Supplier', 'Contact person', 'Email', 'Products', 'Status']} rows={suppliers.map(s => [<span className="font-semibold text-slate-800">{s.name}</span>, s.contact, s.email, s.products, <Status>{s.status}</Status>])} darkMode={darkMode}/>}
+       
+       {page === 'Customers' && <DataTable title="Customer directory" subtitle="Customer activity and purchase history" columns={['Customer', 'Email', 'Orders', 'Total spent', 'Type']} rows={customers.map(c => [<span className="font-semibold text-slate-800">{c.name}</span>, c.email, c.orders, formatINR(c.spent), <Status>{c.type}</Status>])} darkMode={darkMode}/>}
 
         {page === 'Customer Hub' && <div className="space-y-6">
           <div className="overflow-hidden rounded-3xl bg-gradient-to-br from-[#10213f] via-[#164e8a] to-[#0f9f91] p-6 text-white sm:p-8">
@@ -553,8 +555,61 @@ const toggleDarkMode = () => {
   </div>
 }
 
-function DataTable({ title, subtitle, columns, rows }) {
-  return <section className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm shadow-slate-200/30"><div className="border-b border-slate-100 px-5 py-4 sm:px-6"><h3 className="font-bold text-slate-900">{title}</h3><p className="mt-1 text-xs text-slate-500">{subtitle}</p></div>{rows.length ? <div className="overflow-x-auto"><table className="w-full min-w-[650px] text-left text-sm"><thead className="bg-slate-50/80 text-[11px] uppercase tracking-wide text-slate-400"><tr>{columns.map(c => <th key={c} className="px-5 py-3 font-semibold">{c}</th>)}</tr></thead><tbody className="divide-y divide-slate-100">{rows.map((row, i) => <tr key={i} className="hover:bg-slate-50/70">{row.map((cell, j) => <td key={j} className="px-5 py-4 text-slate-600">{cell}</td>)}</tr>)}</tbody></table></div> : <EmptyState title="No records yet" text="Add a record to see it here."/>}</section>
+
+function DataTable({ title, subtitle, columns, rows,  darkMode  }) {
+  return (
+    <section className={`overflow-hidden rounded-2xl border shadow-sm ${
+      darkMode
+        ? 'border-slate-700 bg-slate-800 shadow-black/20'
+        : 'border-slate-200/80 bg-white shadow-slate-200/30'
+    }`}>
+      <div className={`border-b px-5 py-4 sm:px-6 ${
+        darkMode ? 'border-slate-700' : 'border-slate-100'
+      }`}>
+        <h3 className={`font-bold ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+          {title}
+        </h3>
+        <p className={`mt-1 text-xs ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+          {subtitle}
+        </p>
+      </div>
+
+      {rows.length ? (
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[650px] text-left text-sm">
+            <thead className={`text-[11px] uppercase tracking-wide ${
+              darkMode ? 'bg-slate-700 text-slate-300' : 'bg-slate-50/80 text-slate-400'
+            }`}>
+              <tr>
+                {columns.map(c => (
+                  <th key={c} className="px-5 py-3 font-semibold">{c}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className={`divide-y ${
+              darkMode ? 'divide-slate-700' : 'divide-slate-100'
+            }`}>
+              {rows.map((row, i) => (
+                <tr key={i} className={
+                  darkMode ? 'hover:bg-slate-700/60' : 'hover:bg-slate-50/70'
+                }>
+                  {row.map((cell, j) => (
+                    <td key={j} className={`px-5 py-4 ${
+                      darkMode ? 'text-slate-300' : 'text-slate-600'
+                    }`}>
+                      {cell}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <EmptyState title="No records yet" text="Add a record to see it here." />
+      )}
+    </section>
+  );
 }
 
 export default App

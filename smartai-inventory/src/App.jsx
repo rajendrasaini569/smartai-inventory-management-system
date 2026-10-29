@@ -324,7 +324,15 @@ const toggleDarkMode = () => {
 
     <div className="min-h-screen lg:pl-[258px]">
       <header className="sticky top-0 z-20 flex h-[74px] items-center justify-between border-b border-slate-200/80 bg-white/90 px-4 backdrop-blur-xl sm:px-7 lg:px-9">
-        <div className="flex min-w-0 items-center gap-3"><button className="rounded-lg p-2 hover:bg-slate-100 lg:hidden" onClick={() => setMobileOpen(true)}><Menu size={20}/></button><div className="relative hidden w-[min(42vw,390px)] sm:block"><Search size={17} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"/><input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search products, suppliers, anything..." className="w-full rounded-xl border border-slate-200 bg-slate-50/70 py-2.5 pl-10 pr-4 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-300 focus:bg-white focus:ring-4 focus:ring-blue-50"/></div><div className="sm:hidden"><p className="font-bold text-slate-900">{page}</p><p className="text-[11px] text-slate-400">SmartAI Inventory</p></div></div>
+        <div className="flex min-w-0 items-center gap-3"><button className="rounded-lg p-2 hover:bg-slate-100 lg:hidden" onClick={() => setMobileOpen(true)}><Menu size={20}/></button><div className="relative hidden w-[min(42vw,390px)] sm:block"><Search size={17} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"/>
+<input
+  type="text"
+  value={search}
+  onChange={(e) => setSearch(e.target.value)}
+  placeholder="Search products, suppliers, anything..."
+  className="w-full rounded-xl border border-slate-200 bg-slate-50/70 py-2.5 pl-10 pr-4 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-300 focus:bg-white focus:ring-4 focus:ring-blue-50"
+/>
+</div><div className="sm:hidden"><p className="font-bold text-slate-900">{page}</p><p className="text-[11px] text-slate-400">SmartAI Inventory</p></div></div>
         <div className="flex items-center gap-2 sm:gap-4"><button onClick={() => notify(`${lowStock.length} products need stock attention.`)} className="relative rounded-xl p-2.5 text-slate-500 hover:bg-slate-100"><Bell size={19}/>{lowStock.length > 0 && <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-rose-500 ring-2 ring-white"/>}</button><div className="hidden h-8 w-px bg-slate-200 sm:block"/><button className="flex items-center gap-2 rounded-xl p-1.5 pr-1 hover:bg-slate-50" onClick={() => go('Settings')}><div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-blue-100 to-violet-100 text-sm font-bold text-blue-700">AD</div><div className="hidden text-left sm:block"><p className="text-sm font-semibold text-slate-800">Admin User</p><p className="text-[11px] text-slate-400">Store administrator</p></div><ChevronDown size={15} className="hidden text-slate-400 sm:block"/></button></div>
       </header>
 

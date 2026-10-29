@@ -414,7 +414,56 @@ function App() {
             <div className="space-y-5"><section className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-6"><h3 className="text-lg font-bold text-slate-900">Why customers will use it</h3><div className="mt-4 space-y-4">{[{n:'01',title:'Less forgetting',text:'Gentle reminders help customers remember household essentials and regular orders.'},{n:'02',title:'Fewer surprise stock-outs',text:'Low-stock notices and availability updates help customers plan alternatives.'},{n:'03',title:'Faster repeat ordering',text:'Saved routines make daily, weekly and monthly shopping simpler.'},{n:'04',title:'Relevant offers',text:'Opt-in offers can be tailored to past purchases instead of sending random promotions.'}].map(x => <div key={x.n} className="flex gap-3"><span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-xs font-bold text-blue-700">{x.n}</span><div><p className="text-sm font-semibold text-slate-800">{x.title}</p><p className="mt-1 text-sm leading-5 text-slate-500">{x.text}</p></div></div>)}</div></section>
             <section className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-6"><h3 className="text-lg font-bold text-slate-900">Why sellers will use it</h3><div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-1">{[{icon:ArrowUpRight,title:'More repeat sales',text:'Turn reminders into useful repeat orders, not spam.'},{icon:Boxes,title:'Better stock planning',text:'Use low-stock signals and buying patterns to plan replenishment.'},{icon:Wallet,title:'Lower waste & holding cost',text:'Avoid over-ordering by watching actual demand.'},{icon:Users,title:'Customer loyalty',text:'Build trust with reliable availability and useful service.'}].map(x => <div key={x.title} className="flex gap-3 rounded-xl bg-slate-50 p-3"><div className="rounded-lg bg-white p-2 text-blue-600 shadow-sm"><x.icon size={17}/></div><div><p className="text-sm font-semibold text-slate-800">{x.title}</p><p className="mt-1 text-xs leading-5 text-slate-500">{x.text}</p></div></div>)}</div></section></div>
           </div>
-          <section className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-6"><div className="flex flex-wrap items-center justify-between gap-3"><div><h3 className="text-lg font-bold text-slate-900">Notification centre · sample alerts</h3><p className="mt-1 text-sm text-slate-500">Examples of messages customers could receive after backend integration.</p></div><span className="rounded-full bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-700">Preview only</span></div><div className="mt-4 grid gap-3 md:grid-cols-3">{[{icon:AlertTriangle,title:'Item running low',message:'Basmati Rice 5kg is running low at your preferred store.',time:'When stock reaches the alert threshold',tone:'bg-amber-50 text-amber-700'},{icon:CalendarDays,title:'Weekly shopping reminder',message:'Your weekly essentials list is ready. Review before you reorder.',time:'Your chosen weekly schedule',tone:'bg-blue-50 text-blue-700'},{icon:Sparkles,title:'Relevant offer',message:'A preferred store has an offer on an item you often buy.',time:'Only when opted in',tone:'bg-emerald-50 text-emerald-700'}].map(n => <div key={n.title} className="rounded-xl border border-slate-100 p-4"><div className={`mb-3 inline-flex rounded-lg p-2 ${n.tone}`}><n.icon size={18}/></div><p className="font-semibold text-slate-800">{n.title}</p><p className="mt-2 text-sm leading-5 text-slate-500">{n.message}</p><p className="mt-3 text-xs text-slate-400">{n.time}</p></div>)}</div></section>
+       
+<section className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-6">
+  <div className="flex flex-wrap items-center justify-between gap-3">
+    <div>
+      <h3 className="text-lg font-bold text-slate-900">
+        Notification Centre
+      </h3>
+      <p className="mt-1 text-sm text-slate-500">
+        Alerts based on your current inventory stock levels.
+      </p>
+    </div>
+    <span className="rounded-full bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-700">
+      {lowStock.length} stock alerts
+    </span>
+  </div>
+
+  {lowStock.length > 0 ? (
+    <div className="mt-4 grid gap-3 md:grid-cols-3">
+      {lowStock.map(product => (
+        <div
+          key={product.id}
+          className="rounded-xl border border-slate-100 p-4"
+        >
+          <div className="mb-3 inline-flex rounded-lg bg-amber-50 p-2 text-amber-700">
+            <AlertTriangle size={18} />
+          </div>
+          <p className="font-semibold text-slate-800">
+            Item running low
+          </p>
+          <p className="mt-2 text-sm leading-5 text-slate-500">
+            {product.name} has {product.stock} units remaining.
+          </p>
+          <p className="mt-3 text-xs text-slate-400">
+            Reorder level: {product.reorder} units
+          </p>
+        </div>
+      ))}
+    </div>
+  ) : (
+    <div className="mt-4 rounded-xl bg-emerald-50 p-4 text-sm text-emerald-800">
+      All good! No products are currently at or below their reorder level.
+    </div>
+  )}
+
+  <p className="mt-4 text-xs leading-5 text-slate-400">
+    These are in-app stock alerts. Email, SMS and push notifications
+    are not sent automatically.
+  </p>
+</section>
+
         </div>}
 
         {page === 'AI Forecasting' && <div className="space-y-5"><div className="rounded-2xl bg-gradient-to-r from-[#172554] to-[#2563eb] p-6 text-white sm:p-8"><div className="flex flex-wrap items-center justify-between gap-4"><div className="max-w-xl"><div className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold"><Sparkles size={14}/> SMARTAI INSIGHTS</div><h3 className="text-2xl font-bold sm:text-3xl">Plan ahead with smarter stock decisions.</h3><p className="mt-3 text-sm leading-relaxed text-blue-100">This demo uses inventory thresholds and sample sales data to show how a forecasting workspace could look. Connect a real forecasting model to generate data-driven predictions.</p></div><div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-white/10"><BrainCircuit size={42}/></div></div></div><div className="grid gap-4 lg:grid-cols-3"><div className="rounded-2xl border border-slate-200 bg-white p-5"><div className="flex items-center gap-2 text-blue-600"><Activity size={18}/><span className="text-sm font-semibold">Reorder recommendations</span></div><p className="mt-3 text-3xl font-bold">{lowStock.length}</p><p className="mt-1 text-sm text-slate-500">Products at or below reorder level</p></div><div className="rounded-2xl border border-slate-200 bg-white p-5"><div className="flex items-center gap-2 text-teal-600"><Boxes size={18}/><span className="text-sm font-semibold">Total inventory units</span></div><p className="mt-3 text-3xl font-bold">{totalUnits}</p><p className="mt-1 text-sm text-slate-500">Across {products.length} products</p></div><div className="rounded-2xl border border-slate-200 bg-white p-5"><div className="flex items-center gap-2 text-violet-600"><Wallet size={18}/><span className="text-sm font-semibold">Inventory value</span></div><p className="mt-3 text-3xl font-bold">{formatINR(stockValue)}</p><p className="mt-1 text-sm text-slate-500">Based on listed price × stock</p></div></div><div className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6"><h3 className="font-bold text-slate-900">Suggested restock list</h3><p className="mt-1 text-sm text-slate-500">Rule-based suggestions for the current demo inventory</p><div className="mt-4 space-y-3">{(lowStock.length ? lowStock : products.slice(0, 3)).map(p => <div key={p.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-100 p-4"><div><p className="font-semibold text-slate-800">{p.name}</p><p className="mt-1 text-xs text-slate-500">Current stock: {p.stock} · Reorder level: {p.reorder}</p></div><div className="flex items-center gap-3"><Status>{stockStatus(p)}</Status><Button variant="outline" onClick={() => { setTransactionForm({ partner: p.supplier, productId: p.id, quantity: String(Math.max(p.reorder * 2 - p.stock, 1)), amount: '' }); setModal('purchase') }}>Restock</Button></div></div>)}</div></div></div>}

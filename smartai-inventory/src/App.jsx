@@ -365,13 +365,7 @@ const toggleDarkMode = () => {
   darkMode ? 'bg-slate-950 text-white' : 'bg-slate-50 text-slate-900'
 }`}>
         <div className="mb-6 flex flex-wrap items-center justify-between gap-4"><div><div className="mb-1 flex items-center gap-2 text-xs text-slate-400"><span>Workspace</span><ChevronRight size={13}/><span className="font-medium text-slate-600">{page}</span></div><h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-[28px]">{page}</h1><p className="mt-1 text-sm text-slate-500">{pageDescriptions[page]}</p></div><div className="flex flex-wrap items-center gap-2">{page === 'Dashboard' && <div className="hidden items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-medium text-slate-600 md:flex"><CalendarDays size={15} className="text-slate-400"/> Oct 01 – Oct 15, 2026 <ChevronDown size={13}/></div>}{page === 'Products' && <Button variant="outline" onClick={exportCSV}><Download size={16}/> Export CSV</Button>}{page === 'Products' && <Button onClick={openAddProduct}><Plus size={17}/> Add product</Button>}{page === 'Sales' && <Button onClick={() => openTransaction('sale')}><Plus size={17}/> New sale</Button>}{page === 'Purchases' && <Button onClick={() => openTransaction('purchase')}><Plus size={17}/> New purchase</Button>}{page === 'Suppliers' && <Button onClick={() => setModal('supplier')}><Plus size={17}/> Add supplier</Button>}</div></div>
-       <button
-  onClick={toggleDarkMode}
-  className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100"
-  aria-label="Toggle light and dark mode"
->
-  {darkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
-</button>
+    
         {page === 'Dashboard' && <div className="space-y-6">
          
 <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">

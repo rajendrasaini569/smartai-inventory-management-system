@@ -120,6 +120,20 @@ function App() {
   const [reminderPrefs, setReminderPrefs] = useState({ daily: false, weekly: true, monthly: false, lowStock: true, offers: true, email: 'customer@example.com' })
   const [remindersSaved, setRemindersSaved] = useState(false)
   const [selectedProductIds, setSelectedProductIds] = useState([]);
+  
+const [darkMode, setDarkMode] = useState(() => {
+  return localStorage.getItem('smartai-dark-mode') === 'true';
+});
+
+const toggleDarkMode = () => {
+  setDarkMode(previous => {
+    const next = !previous;
+    localStorage.setItem('smartai-dark-mode', String(next));
+    return next;
+  });
+};
+
+  
 
   useEffect(() => {
   let active = true;
